@@ -1,12 +1,15 @@
-📘 DOCUMENTACIÓN COMPLETA — Todo List Fullstack (FastAPI + React + MongoDB)
-# 1. Descripción General del Proyecto
+Todo List Fullstack — FastAPI + React + MongoDB
 
-Este proyecto es una aplicación Fullstack que permite gestionar tareas (CRUD completo).
-Está dividida en:
+Proyecto Fullstack moderno con CRUD completo, despliegue en producción y arquitectura profesional.
 
-Frontend: React + Vite
+📘 1. Descripción General del Proyecto
 
-Backend: FastAPI
+Este proyecto es una aplicación Fullstack para gestionar tareas con un CRUD completo.
+Incluye:
+
+Frontend: React + Vite + TailwindCSS
+
+Backend: FastAPI (Python)
 
 Base de Datos: MongoDB Atlas
 
@@ -16,129 +19,122 @@ Frontend: Vercel
 
 Backend: Render
 
-El sistema permite:
+✔ Funcionalidades principales
 
-✔ Crear tareas
-✔ Listarlas
-✔ Editar título y descripción
-✔ Completar / marcar como pendiente
-✔ Eliminar
-✔ Ver fecha de creación
-✔ Cargar datos desde MongoDB
+Crear tareas
 
-# 2. Arquitectura del Proyecto (C4 — Nivel 1)
+Listarlas en tarjetas
+
+Editar (inline editing)
+
+Cambiar estado pendiente/completada
+
+Eliminar con confirmación
+
+Ver fecha de creación
+
+Conexión real a MongoDB Atlas
+
+UI moderna y responsiva
+
+🏗️ 2. Arquitectura del Proyecto
+
 Usuario
    │
    ▼
-Frontend (Vercel - React)
-   │  Fetch / Axios
+Frontend (React + Vite + Tailwind) — Vercel
+   │   Axios / Fetch
    ▼
-Backend (Render - FastAPI)
-   │  Motor / Async
+Backend (FastAPI — Render)
+   │   Async Motor
    ▼
 Base de Datos (MongoDB Atlas)
 
-Componentes
-🔵 Frontend (React + Vite)
+🔵 Frontend (React)
 
-Hooks: useState, useEffect
+React + Vite
 
-Cliente HTTP: axios
+Axios
 
-TailwindCSS para estilos
+Hooks (useState, useEffect)
 
-Funcionalidades:
+TailwindCSS
 
-Formulario para crear tareas
-
-Vista de tarjetas de tareas
-
-Edición en línea
-
-Confirmación de eliminación
-
-Gestión de estados (pendiente/completada)
+Componentes limpios y responsivos
 
 🟣 Backend (FastAPI)
 
-Motor (MongoDB Async)
+Motor (async MongoDB driver)
 
-Validación con Pydantic
+Pydantic para validación
 
-Rutas RESTful
+CORS habilitado
 
-Manejo de CORS
+API RESTful profesional
 
-Modelo asincrónico
-
-🟢 Base de Datos (MongoDB Atlas)
+🟢 MongoDB Atlas
 
 Colección: todos
 
-Documentos:
-
 {
-  "_id": ObjectId,
+  "_id": "ObjectId",
   "title": "string",
   "description": "string | null",
   "status": "pendiente | completada",
-  "created_at": ISODate
+  "created_at": "ISODate"
 }
-
-# 3. Instalación y Ejecución Local
+⚙️ 3. Instalación y Ejecución en Local
 🔧 Backend (FastAPI)
 
-Entrar al backend:
+1. Ir al backend
 
 cd backend
 
-
-Instalar dependencias:
+Instalar dependencias
 
 pip install -r requirements.txt
 
 
-Crear archivo .env:
+Crear archivo .env
 
 MONGO_URI=mongodb+srv://...
 
 
-Ejecutar el servidor:
+Ejecutar servidor
 
 uvicorn app.main:app --reload
 
 
-API local:
-
+📌 Documentación automática (Swagger):
 ➡ http://127.0.0.1:8000/docs
 
 💻 Frontend (React)
 
-Entrar al frontend:
+Ir al frontend
 
 cd frontend
 
 
-Instalar dependencias:
+Instalar dependencias
 
 npm install
 
 
-Crear archivo .env:
+Crear .env
 
 VITE_API_URL=http://127.0.0.1:8000
 
 
-Ejecutar el proyecto:
+Ejecutar
 
 npm run dev
 
 
 Frontend local:
-
 ➡ http://127.0.0.1:5173
 
-# 4. Estructura del Repositorio
+📂 4. Estructura del Repositorio
+
 /
 ├── backend/
 │   ├── app/
@@ -149,7 +145,7 @@ Frontend local:
 │   │   │   └── todo.py
 │   │   └── config.py
 │   ├── requirements.txt
-│   └── .env (ignorado)
+│   └── .env 
 │
 ├── frontend/
 │   ├── src/
@@ -158,19 +154,19 @@ Frontend local:
 │   │   └── index.css
 │   └── vite.config.js
 │
-├── README.md
-# 5. Documentación de la API (Backend)
+└── README.md
 
-Base URL producción Render:
+
+📡 5. Documentación de la API (Backend)
+🔗 Base URL (producción Render)
 
 https://todo-fullstack-fastapi-mongo.onrender.com/
 
-## GET /api/todos
+🟦 GET /api/todos
 
 Obtiene todas las tareas.
 
-📌 Respuesta:
-
+Respuesta ejemplo:
 [
   {
     "id": "676e8d...",
@@ -181,126 +177,118 @@ Obtiene todas las tareas.
   }
 ]
 
-## POST /api/todos
+🟩 POST /api/todos
 
 Crea una nueva tarea.
 
-📌 Body requerido:
-
+Body ejemplo:
 {
   "title": "Mi tarea",
   "description": "Opcional",
   "status": "pendiente"
 }
-
-
-✔ Responde con la tarea creada.
-
-## PUT /api/todos/{id}
+🟨 PUT /api/todos/{id}
 
 Actualiza título, descripción o estado.
 
-📌 Body ejemplo:
-
+Body ejemplo:
 {
   "title": "Título editado",
   "description": "Nueva descripción"
 }
-
-
-✔ Devuelve la tarea actualizada.
-
-## DELETE /api/todos/{id}
+🟥 DELETE /api/todos/{id}
 
 Elimina una tarea.
+Status: 204 No Content
 
-✔ Responde status 204.
+🛠️ 6. Documentación Técnica del Backend
+📌 app/main.py
 
-# 6. Documentación Técnica del Backend
-📌 Archivo: app/main.py
-Configura:
-
-FastAPI
+Configura FastAPI
 
 CORS
 
 Conexión a MongoDB
 
-Enrutadores
+Routers
 
-📌 Archivo: routers/todos.py
+📌 routers/todos.py — CRUD completo
 
-Contiene el CRUD completo.
-Trabaja de forma asíncrona usando motor.
+Asíncrono (async/await)
 
-Crea documentos:
-new_todo["created_at"] = datetime.utcnow()
+Validación de títulos vacíos
 
-Convierte el _id:
-doc["id"] = str(doc["_id"])
+Conversión de _id a id (string)
 
-📌 Archivo: models/todo.py
+created_at automático
 
-Modelos Pydantic:
+📌 models/todo.py — Modelos Pydantic
 
-TodoCreate → para POST
+TodoCreate → POST
 
-TodoUpdate → para PUT
+TodoUpdate → PUT
 
-Todo → para respuestas
+Todo → respuesta
 
-# 7. Documentación Técnica del Frontend
-📌 Peticiones HTTP con axios
-const res = await axios.get(`${API_URL}/api/todos`);
+Manejo de opcionales
 
-📌 Crear tarea
-await axios.post(`${API_URL}/api/todos`, {
-  title,
-  description,
-  status: "pendiente"
+🎨 7. Documentación Técnica del Frontend
+📌 Peticiones HTTP
+
+Obtener tareas
+axios.get(`${API_URL}/api/todos`)
+Crear
+
+axios.post(`${API_URL}/api/todos`, { title, description })
+
+
+Editar
+
+axios.put(`${API_URL}/api/todos/${id}`, { title, description })
+
+
+Cambiar estado
+
+axios.put(`${API_URL}/api/todos/${todo.id}`, {
+  status: todo.status === "pendiente" ? "completada" : "pendiente"
 })
 
-📌 Editar
-await axios.put(`${API_URL}/api/todos/${id}`, {
-  title: editTitle,
-  description: editDescription
-})
 
-📌 Cambiar estado
-await axios.put(`${API_URL}/api/todos/${todo.id}`, {
-  status: todo.status === 'pendiente' ? 'completada' : 'pendiente'
-})
+Eliminar
 
-📌 Eliminar
-await axios.delete(`${API_URL}/api/todos/${id}`)
+axios.delete(`${API_URL}/api/todos/${id}`)
 
-# 8. Funcionalidades del Frontend
-✔ Crear tareas
-✔ Listar tareas
-✔ Editar tareas en línea
-✔ Completar con un click
-✔ Eliminar con confirmación
+💻 8. Funcionalidades del Frontend
+
+✔ UI moderna y responsiva
+✔ Tarjetas con sombras y animaciones
+✔ Edición en línea
+✔ Confirmación al eliminar
 ✔ Alertas de error
-✔ Loading
-✔ Vista responsiva
-✔ Tarjetas con estilos modernos
-# 9. Despliegue
+✔ Indicadores de carga
+✔ Cambios de estado con un click
+✔ Diseño profesional
+
+🚀 9. Despliegue
 🔵 Backend — Render
 
-Runtime: Python
+Runtime: Python 3.11
 
-Build: pip install -r requirements.txt
+Build:
+
+pip install -r requirements.txt
+
 
 Start:
 
 uvicorn app.main:app --host 0.0.0.0 --port $PORT
 
 
-Var:
+Env:
 
-MONGO_URI = mongodb+srv://...
+MONGO_URI=mongodb+srv://...
 
-🔵 Frontend — Vercel
+🟣 Frontend — Vercel
 
 Root: /frontend
 
@@ -310,24 +298,26 @@ Output: dist
 
 Env:
 
-VITE_API_URL=https://todo-fullstack-fastapi-mongo.vercel.app/
+VITE_API_URL=https://todo-fullstack-fastapi-mongo.onrender.com/
 
-# 10. Conclusiones
+📝 10. Conclusiones
 
-Este proyecto implementa una arquitectura moderna con:
+Este proyecto implementa tecnologías modernas y despliegue real:
 
 ✔ UI profesional
+
 ✔ Backend asincrónico
+
 ✔ Base de datos en la nube
+
 ✔ CRUD completo
-✔ Despliegue real en producción
 
-Es totalmente funcional para entregar como:
+✔ Arquitectura escalable
 
-📌 Proyecto final
-📌 Evaluación de programación
-📌 Evidencia de desarrollo fullstack
+✔ Proyecto listo para entregar como evidencia final
 
-Autores
+👨‍💻 Autores
 
-Nicolas Sanchez y Zack Sandon
+Nicolás Sanchez
+
+Zack Sandon
