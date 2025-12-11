@@ -1,323 +1,148 @@
-Todo List Fullstack — FastAPI + React + MongoDB
+📘 Todo List FullStack – FastAPI + React + MongoDB
+Este proyecto es una aplicación FullStack completa diseñada para gestionar tareas mediante operaciones CRUD, con una interfaz moderna y un backend asincrónico. Incluye conexión en la nube a MongoDB Atlas, documentación automática de la API, arquitectura limpia y despliegue profesional.
 
-Proyecto Fullstack moderno con CRUD completo, despliegue en producción y arquitectura profesional.
+✨ Características principales
 
-📘 1. Descripción General del Proyecto
-
-Este proyecto es una aplicación Fullstack para gestionar tareas con un CRUD completo.
-Incluye:
-
-Frontend: React + Vite + TailwindCSS
-
-Backend: FastAPI (Python)
-
-Base de Datos: MongoDB Atlas
-
-Despliegue:
-
-Frontend: Vercel
-
-Backend: Render
-
-✔ Funcionalidades principales
-
-Crear tareas
-
-Listarlas en tarjetas
-
-Editar (inline editing)
-
-Cambiar estado pendiente/completada
-
-Eliminar con confirmación
-
-Ver fecha de creación
-
-Conexión real a MongoDB Atlas
-
-UI moderna y responsiva
-
-🏗️ 2. Arquitectura del Proyecto
-
-Usuario
-   │
-   ▼
-Frontend (React + Vite + Tailwind) — Vercel
-   │   Axios / Fetch
-   ▼
-Backend (FastAPI — Render)
-   │   Async Motor
-   ▼
-Base de Datos (MongoDB Atlas)
-
-🔵 Frontend (React)
-
-React + Vite
-
-Axios
-
-Hooks (useState, useEffect)
-
-TailwindCSS
-
-Componentes limpios y responsivos
-
-🟣 Backend (FastAPI)
-
-Motor (async MongoDB driver)
-
-Pydantic para validación
-
-CORS habilitado
-
-API RESTful profesional
-
-🟢 MongoDB Atlas
-
-Colección: todos
-
-{
-  "_id": "ObjectId",
-  "title": "string",
-  "description": "string | null",
-  "status": "pendiente | completada",
-  "created_at": "ISODate"
-}
-⚙️ 3. Instalación y Ejecución en Local
-🔧 Backend (FastAPI)
-
-1. Ir al backend
-
-cd backend
-
-Instalar dependencias
-
-pip install -r requirements.txt
+✅ CRUD completo (Crear, Leer, Actualizar, Eliminar)
+✅ Backend con FastAPI + MongoDB Atlas
+✅ Frontend con React + Vite
+✅ Peticiones HTTP con Axios
+✅ Código modular y bien organizado
+✅ Despliegue real en producción (Render + Vercel)
+✅ Documentación automática (Swagger / ReDoc)
 
 
-Crear archivo .env
-
-MONGO_URI=mongodb+srv://...
-
-
-Ejecutar servidor
-
-uvicorn app.main:app --reload
-
-
-📌 Documentación automática (Swagger):
-➡ http://127.0.0.1:8000/docs
-
-💻 Frontend (React)
-
-Ir al frontend
-
-cd frontend
-
-
-Instalar dependencias
-
-npm install
-
-
-Crear .env
-
-VITE_API_URL=http://127.0.0.1:8000
-
-
-Ejecutar
-
-npm run dev
-
-
-Frontend local:
-➡ http://127.0.0.1:5173
-
-📂 4. Estructura del Repositorio
-
-/
+🧱 Arquitectura del Proyecto
+texttodo-fullstack-fastapi-mongo/
+│
 ├── backend/
-│   ├── app/
-│   │   ├── main.py
-│   │   ├── routers/
-│   │   │   └── todos.py
-│   │   ├── models/
-│   │   │   └── todo.py
-│   │   └── config.py
+│   ├── app.py
+│   ├── database.py
+│   ├── models.py
+│   ├── routes.py
 │   ├── requirements.txt
-│   └── .env 
+│   └── .env (ejemplo)
 │
 ├── frontend/
+│   ├── index.html
+│   ├── vite.config.js
+│   ├── package.json
 │   ├── src/
 │   │   ├── App.jsx
 │   │   ├── main.jsx
-│   │   └── index.css
-│   └── vite.config.js
+│   │   ├── components/
+│   │   │   ├── TodoForm.jsx
+│   │   │   ├── TodoList.jsx
+│   │   │   └── TodoItem.jsx
+│   │   └── ...
+│   └── .env (ejemplo)
 │
 └── README.md
 
+🚀 Tecnologías empleadas
+🔹 Backend
 
-📡 5. Documentación de la API (Backend)
-🔗 Base URL (producción Render)
+FastAPI
+Uvicorn
+Motor (driver asíncrono para MongoDB)
+Pydantic
 
-https://todo-fullstack-fastapi-mongo.onrender.com/
+🔹 Base de datos
 
-🟦 GET /api/todos
+MongoDB Atlas
+Colección principal: todos
 
-Obtiene todas las tareas.
+🔹 Frontend
 
-Respuesta ejemplo:
-[
-  {
-    "id": "676e8d...",
-    "title": "Comprar leche",
-    "description": "urgente",
-    "status": "pendiente",
-    "created_at": "2024-12-10T18:20:11.000Z"
-  }
-]
+React 18
+Vite
+Axios
+React Hooks
+CSS / TailwindCSS (opcional)
 
-🟩 POST /api/todos
+🔹 Despliegue
 
-Crea una nueva tarea.
+Render (Backend)
+Vercel (Frontend)
 
-Body ejemplo:
-{
-  "title": "Mi tarea",
-  "description": "Opcional",
-  "status": "pendiente"
+
+⚙️ Instalación y ejecución en local
+🖥️ Backend – FastAPI
+Bashcd backend
+
+Crear entorno virtualBashpython -m venv venv
+Activar entorno
+Windows:Bashvenv\Scripts\activate
+Linux/Mac:Bashsource venv/bin/activate
+
+Instalar dependenciasBashpip install -r requirements.txt
+Crear archivo .envenvMONGO_URL=mongodb+srv://<usuario>:<password>@cluster.mongodb.net/<dbname>?retryWrites=true&w=majority
+Ejecutar el servidorBashuvicorn app:app --reload --port 3000
+
+📚 Documentación automática de la API
+
+Swagger UI: http://localhost:3000/docs
+ReDoc: http://localhost:3000/redoc
+
+
+🌐 Frontend – React + Vite
+Bashcd ../frontend
+
+Instalar dependenciasBashnpm install
+Crear archivo .envenvVITE_API_URL=http://localhost:3000
+Ejecutar la aplicaciónBashnpm run devAbre tu navegador en: http://localhost:5173
+
+
+📌 Endpoints de la API
+
+MétodoEndpointDescripciónEjemplo de BodyGET/Verifica el estado del servidor-GET/todosObtiene todas las tareas-POST/todosCrea una nueva tarea{"title": "Estudiar", "completed": false}PUT/todos/{id}Actualiza una tarea{"title": "Tarea actualizada", "completed": true}DELETE/todos/{id}Elimina una tarea-
+Respuesta de raíz (GET /):
+JSON{
+  "message": "Backend Todo List funcionando con MongoDB Atlas"
 }
-🟨 PUT /api/todos/{id}
 
-Actualiza título, descripción o estado.
-
-Body ejemplo:
-{
-  "title": "Título editado",
-  "description": "Nueva descripción"
-}
-🟥 DELETE /api/todos/{id}
-
-Elimina una tarea.
-Status: 204 No Content
-
-🛠️ 6. Documentación Técnica del Backend
-📌 app/main.py
-
-Configura FastAPI
-
-CORS
-
-Conexión a MongoDB
-
-Routers
-
-📌 routers/todos.py — CRUD completo
-
-Asíncrono (async/await)
-
-Validación de títulos vacíos
-
-Conversión de _id a id (string)
-
-created_at automático
-
-📌 models/todo.py — Modelos Pydantic
-
-TodoCreate → POST
-
-TodoUpdate → PUT
-
-Todo → respuesta
-
-Manejo de opcionales
-
-🎨 7. Documentación Técnica del Frontend
-📌 Peticiones HTTP
-
-Obtener tareas
-axios.get(`${API_URL}/api/todos`)
-Crear
-
-axios.post(`${API_URL}/api/todos`, { title, description })
-
-
-Editar
-
-axios.put(`${API_URL}/api/todos/${id}`, { title, description })
-
-
-Cambiar estado
-
-axios.put(`${API_URL}/api/todos/${todo.id}`, {
-  status: todo.status === "pendiente" ? "completada" : "pendiente"
-})
-
-
-Eliminar
-
-axios.delete(`${API_URL}/api/todos/${id}`)
-
-💻 8. Funcionalidades del Frontend
-
-✔ UI moderna y responsiva
-✔ Tarjetas con sombras y animaciones
-✔ Edición en línea
-✔ Confirmación al eliminar
-✔ Alertas de error
-✔ Indicadores de carga
-✔ Cambios de estado con un click
-✔ Diseño profesional
-
-🚀 9. Despliegue
+🛰️ Despliegue en producción
 🔵 Backend — Render
 
-Runtime: Python 3.11
+Runtime: Python
+Build Command: pip install -r requirements.txt
+Start Command: uvicorn app:app --host 0.0.0.0 --port $PORT
+Variables de entorno:envMONGO_URL=tu_url_de_mongodb_atlas
 
-Build:
+🔵 Frontend — Vercel
 
-pip install -r requirements.txt
-
-
-Start:
-
-uvicorn app.main:app --host 0.0.0.0 --port $PORT
+Root Directory: frontend
+Build Command: npm run build
+Output Directory: dist
+Variable de entorno:envVITE_API_URL=https://<tu-backend>.onrender.com
 
 
-Env:
+🧪 Pruebas del sistema
 
-MONGO_URI=mongodb+srv://...
+✅ CRUD completo probado (local y producción)
+✅ CORS configurado correctamente
+✅ Respuestas en formato JSON
+✅ Manejo de errores
+✅ Funcionamiento total en entorno online
 
-🟣 Frontend — Vercel
+🔒 Seguridad aplicada
 
-Root: /frontend
+Variables de entorno con .env
+Conexión segura a MongoDB Atlas
+Configuración de CORS
+Separación clara de capas (backend/frontend)
 
-Build: npm run build
 
-Output: dist
+📈 Mejoras futuras
 
-Env:
+Autenticación con Login + JWT
+Prioridades y categorías en tareas
+Filtros y búsqueda avanzada
+Modo oscuro (Dark Mode)
+Contenerización con Docker
 
-VITE_API_URL=https://todo-fullstack-fastapi-mongo.onrender.com/
-
-📝 10. Conclusiones
-
-Este proyecto implementa tecnologías modernas y despliegue real:
-
-✔ UI profesional
-
-✔ Backend asincrónico
-
-✔ Base de datos en la nube
-
-✔ CRUD completo
-
-✔ Arquitectura escalable
-
-✔ Proyecto listo para entregar como evidencia final
 
 👨‍💻 Autores
-
-Nicolás Sanchez
-
-Zack Sandon
+Zack Sandon y Nicolas Sanchez
+📍 Colombia
+GitHub: https://github.com/Zacksandon
