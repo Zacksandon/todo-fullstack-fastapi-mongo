@@ -1,19 +1,25 @@
-📘 Todo List FullStack – FastAPI + React + MongoDB
-Este proyecto es una aplicación FullStack completa diseñada para gestionar tareas mediante operaciones CRUD, con una interfaz moderna y un backend asincrónico. Incluye conexión en la nube a MongoDB Atlas, documentación automática de la API, arquitectura limpia y despliegue profesional.
+# 📘 Todo List FullStack – FastAPI + React + MongoDB
 
-✨ Características principales
+Este proyecto es una aplicación **FullStack completa** diseñada para gestionar tareas mediante operaciones CRUD, interfaz moderna y backend asincrónico. Incluye conexión en la nube, documentación automática, arquitectura limpia y despliegue profesional.
 
-✅ CRUD completo (Crear, Leer, Actualizar, Eliminar)
-✅ Backend con FastAPI + MongoDB Atlas
-✅ Frontend con React + Vite
-✅ Peticiones HTTP con Axios
-✅ Código modular y bien organizado
-✅ Despliegue real en producción (Render + Vercel)
-✅ Documentación automática (Swagger / ReDoc)
+---
 
+# ✨ Características principales
 
-🧱 Arquitectura del Proyecto
-texttodo-fullstack-fastapi-mongo/
+✔ CRUD completo (Crear, Leer, Actualizar, Eliminar)  
+✔ Backend con **FastAPI + MongoDB Atlas**  
+✔ Frontend con **React + Vite**  
+✔ Estilos modernos  
+✔ Axios para peticiones  
+✔ Código modular  
+✔ Despliegue real (Render + Vercel)
+
+---
+
+# 🧱 Arquitectura del Proyecto
+
+```
+todo-fullstack-fastapi-mongo/
 │
 ├── backend/
 │   ├── app.py
@@ -21,7 +27,6 @@ texttodo-fullstack-fastapi-mongo/
 │   ├── models.py
 │   ├── routes.py
 │   ├── requirements.txt
-│   └── .env (ejemplo)
 │
 ├── frontend/
 │   ├── index.html
@@ -34,115 +39,265 @@ texttodo-fullstack-fastapi-mongo/
 │   │   │   ├── TodoForm.jsx
 │   │   │   ├── TodoList.jsx
 │   │   │   └── TodoItem.jsx
-│   │   └── ...
-│   └── .env (ejemplo)
 │
 └── README.md
+```
 
-🚀 Tecnologías empleadas
-🔹 Backend
+---
 
-FastAPI
-Uvicorn
-Motor (driver asíncrono para MongoDB)
-Pydantic
+# 🚀 Tecnologías empleadas
 
-🔹 Base de datos
+### 🔹 Backend
+- FastAPI  
+- Uvicorn  
+- Motor (MongoDB async)  
+- Pydantic  
 
-MongoDB Atlas
-Colección principal: todos
+### 🔹 Base de datos
+- MongoDB Atlas  
+- Colección: `todos`
 
-🔹 Frontend
+### 🔹 Frontend
+- React  
+- Vite  
+- Axios  
+- Hooks  
+- CSS / Tailwind opcional
 
-React 18
-Vite
-Axios
-React Hooks
-CSS / TailwindCSS (opcional)
+### 🔹 Despliegue
+- Render (Backend)  
+- Vercel (Frontend)  
 
-🔹 Despliegue
+---
 
-Render (Backend)
-Vercel (Frontend)
+# ⚙️ Instalación y ejecución en local
 
+## 🖥️ Backend – FastAPI
 
-⚙️ Instalación y ejecución en local
-🖥️ Backend – FastAPI
-Bashcd backend
+### 1️⃣ Entrar al backend
+```sh
+cd backend
+```
 
-Crear entorno virtualBashpython -m venv venv
-Activar entorno
-Windows:Bashvenv\Scripts\activate
-Linux/Mac:Bashsource venv/bin/activate
+### 2️⃣ Crear entorno virtual
+```sh
+python -m venv venv
+```
 
-Instalar dependenciasBashpip install -r requirements.txt
-Crear archivo .envenvMONGO_URL=mongodb+srv://<usuario>:<password>@cluster.mongodb.net/<dbname>?retryWrites=true&w=majority
-Ejecutar el servidorBashuvicorn app:app --reload --port 3000
+### 3️⃣ Activarlo
+Windows:
+```sh
+venv\Scriptsctivate
+```
 
-📚 Documentación automática de la API
+Linux/Mac:
+```sh
+source venv/bin/activate
+```
 
-Swagger UI: http://localhost:3000/docs
-ReDoc: http://localhost:3000/redoc
+### 4️⃣ Instalar dependencias
+```sh
+pip install -r requirements.txt
+```
 
+### 5️⃣ Crear archivo `.env`
+```
+MONGO_URL=mongodb+srv://<usuario>:<pass>@cluster.mongodb.net/
+```
 
-🌐 Frontend – React + Vite
-Bashcd ../frontend
+### 6️⃣ Ejecutar el servidor
+```sh
+uvicorn app:app --reload --port 3000
+```
 
-Instalar dependenciasBashnpm install
-Crear archivo .envenvVITE_API_URL=http://localhost:3000
-Ejecutar la aplicaciónBashnpm run devAbre tu navegador en: http://localhost:5173
+### 7️⃣ Documentación automática
+Swagger:
+```
+http://localhost:3000/docs
+```
 
+ReDoc:
+```
+http://localhost:3000/redoc
+```
 
-📌 Endpoints de la API
+---
 
-MétodoEndpointDescripciónEjemplo de BodyGET/Verifica el estado del servidor-GET/todosObtiene todas las tareas-POST/todosCrea una nueva tarea{"title": "Estudiar", "completed": false}PUT/todos/{id}Actualiza una tarea{"title": "Tarea actualizada", "completed": true}DELETE/todos/{id}Elimina una tarea-
-Respuesta de raíz (GET /):
-JSON{
-  "message": "Backend Todo List funcionando con MongoDB Atlas"
+# 📚 Documentación de la API
+
+## 🟩 GET /
+Verifica el estado del servidor.
+
+**Respuesta:**
+```json
+{ "message": "Backend Todo List funcionando con MongoDB Atlas" }
+```
+
+---
+
+## 🟩 GET /todos
+Obtiene todas las tareas.
+
+---
+
+## 🟨 POST /todos
+Crea una nueva tarea.
+
+**Body:**
+```json
+{
+  "title": "Estudiar",
+  "completed": false
 }
+```
 
-🛰️ Despliegue en producción
-🔵 Backend — Render
+---
 
+## 🟦 PUT /todos/{id}
+Actualiza una tarea.
+
+**Body:**
+```json
+{
+  "title": "Tarea actualizada",
+  "completed": true
+}
+```
+
+---
+
+## 🟥 DELETE /todos/{id}
+Elimina una tarea.
+
+---
+
+# 🌐 Frontend – React + Vite
+
+## 1️⃣ Entrar al frontend
+```sh
+cd frontend
+```
+
+## 2️⃣ Instalar dependencias
+```sh
+npm install
+```
+
+## 3️⃣ Crear archivo `.env`
+```
+VITE_API_URL=http://localhost:3000
+```
+
+## 4️⃣ Ejecutar la app
+```sh
+npm run dev
+```
+
+App:
+```
+http://localhost:5173
+```
+
+---
+
+# 🧱 Estructura del Frontend
+
+### 📌 `TodoForm.jsx`
+Formulario para crear tareas.
+
+### 📌 `TodoList.jsx`
+Lista todas las tareas desde la API.
+
+### 📌 `TodoItem.jsx`
+Permite:
+- editar
+- eliminar
+- marcar como completada
+
+### 📌 `App.jsx`
+Controla el estado principal.
+
+---
+
+# 🛰️ Despliegue
+
+## 🔵 Backend — Render
+
+**Configuración:**
+```
 Runtime: Python
 Build Command: pip install -r requirements.txt
 Start Command: uvicorn app:app --host 0.0.0.0 --port $PORT
-Variables de entorno:envMONGO_URL=tu_url_de_mongodb_atlas
+```
 
-🔵 Frontend — Vercel
+**Variables de entorno:**
+```
+MONGO_URL=...
+```
 
-Root Directory: frontend
-Build Command: npm run build
-Output Directory: dist
-Variable de entorno:envVITE_API_URL=https://<tu-backend>.onrender.com
+---
+
+## 🔵 Frontend — Vercel
+
+**Configuración:**
+
+Root:
+```
+frontend
+```
+
+Build:
+```
+npm run build
+```
+
+Output:
+```
+dist
+```
+
+Environment:
+```
+VITE_API_URL=https://<backend>.onrender.com
+```
+
+---
+
+# 🧪 Pruebas del Sistema
+
+✔ CRUD completo probado  
+✔ CORS funcionando  
+✔ Respuestas JSON  
+✔ Validación de errores  
+✔ Prueba total en online + local  
+
+---
+
+# 🔒 Seguridad aplicada
+
+- Variables ocultas con `.env`
+- MongoDB Atlas protegido
+- CORS configurado
+- Código separado por capas
+
+---
+
+# 📈 Mejoras futuras
+
+- Login & JWT  
+- Prioridad de tareas  
+- Filtros  
+- Dark mode  
+- Docker  
+
+---
+
+# 👨‍💻 Autor
+
+**Zack Sandon** y **Nicolas Sanchez**  
+📍 Colombia  
+GitHub: https://github.com/Zacksandon  
+
+---
 
 
-🧪 Pruebas del sistema
-
-✅ CRUD completo probado (local y producción)
-✅ CORS configurado correctamente
-✅ Respuestas en formato JSON
-✅ Manejo de errores
-✅ Funcionamiento total en entorno online
-
-🔒 Seguridad aplicada
-
-Variables de entorno con .env
-Conexión segura a MongoDB Atlas
-Configuración de CORS
-Separación clara de capas (backend/frontend)
-
-
-📈 Mejoras futuras
-
-Autenticación con Login + JWT
-Prioridades y categorías en tareas
-Filtros y búsqueda avanzada
-Modo oscuro (Dark Mode)
-Contenerización con Docker
-
-
-👨‍💻 Autores
-Zack Sandon y Nicolas Sanchez
-📍 Colombia
-GitHub: https://github.com/Zacksandon
