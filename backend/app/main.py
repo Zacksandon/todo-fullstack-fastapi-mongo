@@ -1,22 +1,29 @@
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
-from pymongo import MongoClient
-from routers.todos import router as todos_router
+from motor.motor_asyncio import AsyncIOMotorClient
+from config.settings import settings
 
-app = FastAPI()
+# Inicializar app
+app = FastAPI(title="Todo List Fullstack - FastAPI + MongoDB")
 
-# CORS – dejarlo arriba SIEMPRE
+# CORS (DEBE IR ARRIBA)
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=["*"],  # en producción puedes especificar solo tu dominio
+    allow_origins=["*"],         # Puedes limitar solo tu dominio si quieres
     allow_credentials=True,
     allow_methods=["*"],
     allow_headers=["*"],
 )
 
-# Registrar routers
-app.include_router(todos_router)
+# Conexión a MongoDB
+client = AsyncIOMotorClient(settings.DATABASE_URL)
+db = client.todoapp
+collection = db.todos
+
+# Importar routers
+from app.routers import todos
+app.include_router(todos.router)
 
 @app.get("/")
-def root():
-    return {"message": "API funcionando 🚀"}
+def home():
+    return {"message": "Backend Todo List funcionando con MongoDB Atlas 🚀"}
