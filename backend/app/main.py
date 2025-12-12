@@ -1,35 +1,22 @@
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
-import os
-from motor.motor_asyncio import AsyncIOMotorClient
-from dotenv import load_dotenv
+from pymongo import MongoClient
+from routers.todos import router as todos_router
 
-load_dotenv()
+app = FastAPI()
 
-app = FastAPI(title="Todo List Fullstack - MongoDB Atlas")
-
-origins = [
-    "https://todo-fullstack-fastapi-mongo.vercel.app",
-    "http://localhost:5173",
-]
-
+# CORS – dejarlo arriba SIEMPRE
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=origins,
+    allow_origins=["*"],  # en producción puedes especificar solo tu dominio
     allow_credentials=True,
     allow_methods=["*"],
     allow_headers=["*"],
 )
 
-MONGO_URI = os.getenv("MONGO_URI")
-client = AsyncIOMotorClient(MONGO_URI)
-db = client.todoapp
-collection = db.todos
-
-from app.routers import todos
-app.include_router(todos.router, prefix="/api")   # <-- SOLO AQUÍ SE COLOCA EL PREFIX
+# Registrar routers
+app.include_router(todos_router)
 
 @app.get("/")
-def home():
-    return {"message": "Backend Todo List funcionando con MongoDB Atlas"}
-
+def root():
+    return {"message": "API funcionando 🚀"}
