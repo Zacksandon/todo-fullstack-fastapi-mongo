@@ -8,9 +8,15 @@ load_dotenv()
 
 app = FastAPI(title="Todo List Fullstack - MongoDB Atlas")
 
+# Lista de dominios permitidos (tu frontend)
+origins = [
+    "https://todo-fullstack-fastapi-mongo.vercel.app",
+    "http://localhost:5173",
+]
+
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=["*"],
+    allow_origins=origins,         # NO usar "*"
     allow_credentials=True,
     allow_methods=["*"],
     allow_headers=["*"],
@@ -22,7 +28,7 @@ db = client.todoapp
 collection = db.todos
 
 from app.routers import todos
-app.include_router(todos.router)
+app.include_router(todos.router, prefix="/api")  # <-- IMPORTANTE
 
 @app.get("/")
 def home():
