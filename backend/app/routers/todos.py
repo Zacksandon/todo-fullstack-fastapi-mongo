@@ -4,17 +4,19 @@ from app.models.todo import Todo, TodoCreate, TodoUpdate
 from datetime import datetime
 from bson import ObjectId
 
-router = APIRouter(prefix="/api/todos", tags=["todos"])
-
+router = APIRouter(
+    prefix="/api/todos",
+    tags=["Todos"]
+)
 
 @router.get("", response_model=list[Todo])
 async def get_todos():
     todos = []
     async for doc in collection.find():
         doc["id"] = str(doc["_id"])
-        doc.pop("_id")  # 🔥 CLAVE
+        doc.pop("_id")
         doc["created_at"] = doc.get("created_at", datetime.utcnow())
-        todos.append(doc)  # 👈 NO crear modelo aquí
+        todos.append(doc)
     return todos
 
 
@@ -40,17 +42,15 @@ async def update_todo(todo_id: str, todo_update: TodoUpdate):
     if not ObjectId.is_valid(todo_id):
         raise HTTPException(404, "ID inválido")
 
-    update_data = todo_update.dict(exclude_unset=True)
-
     await collection.update_one(
         {"_id": ObjectId(todo_id)},
-        {"$set": update_data}
+        {"$set": todo_update.dict(exclude_unset=True)}
     )
 
     updated = await collection.find_one({"_id": ObjectId(todo_id)})
 
     if not updated:
-        raise HTTPException(404, "No encontrado")
+        raise HTTPException(404)
 
     updated["id"] = str(updated["_id"])
     updated.pop("_id")
