@@ -1,50 +1,66 @@
 from fastapi import APIRouter, HTTPException
-from bson import ObjectId
-from datetime import datetime
 from app.main import collection
+from app.models.todo import Todo, TodoCreate, TodoUpdate
+from datetime import datetime
+from bson import ObjectId
 
 router = APIRouter(prefix="/api/todos", tags=["todos"])
 
 
-@router.get("/")
+@router.get("", response_model=list[Todo])
 async def get_todos():
     todos = []
     async for doc in collection.find():
         doc["id"] = str(doc["_id"])
         doc["created_at"] = doc.get("created_at", datetime.utcnow())
-        todos.append(doc)
+        todos.append(Todo(**doc))
     return todos
 
 
-@router.get("")
-async def get_todos_no_slash():
-    return await get_todos()
+@router.post("", response_model=Todo, status_code=201)
+async def create_todo(todo: TodoCreate):
+    if not todo.title.strip():
+        raise HTTPException(status_code=400, detail="El título es obligatorio")
+
+    new_todo = todo.dict()
+    new_todo["created_at"] = datetime.utcnow()
+
+    result = await collection.insert_one(new_todo)
+    created = await collection.find_one({"_id": result.inserted_id})
+    created["id"] = str(created["_id"])
+
+    return Todo(**created)
 
 
-@router.post("/")
-async def create_todo(todo: dict):
-    todo["created_at"] = datetime.utcnow()
-    result = await collection.insert_one(todo)
-    todo["id"] = str(result.inserted_id)
-    return todo
-
-
-@router.put("/{todo_id}")
-async def update_todo(todo_id: str, todo: dict):
+@router.put("/{todo_id}", response_model=Todo)
+async def update_todo(todo_id: str, todo_update: TodoUpdate):
     if not ObjectId.is_valid(todo_id):
-        raise HTTPException(404)
+        raise HTTPException(status_code=404, detail="ID inválido")
 
-    await collection.update_one(
+    update_data = todo_update.dict(exclude_unset=True)
+
+    result = await collection.update_one(
         {"_id": ObjectId(todo_id)},
-        {"$set": todo}
+        {"$set": update_data}
     )
-    return {"ok": True}
+
+    if result.matched_count == 0:
+        raise HTTPException(status_code=404, detail="No encontrado")
+
+    updated = await collection.find_one({"_id": ObjectId(todo_id)})
+    updated["id"] = str(updated["_id"])
+
+    return Todo(**updated)
 
 
-@router.delete("/{todo_id}")
+@router.delete("/{todo_id}", status_code=204)
 async def delete_todo(todo_id: str):
     if not ObjectId.is_valid(todo_id):
-        raise HTTPException(404)
+        raise HTTPException(status_code=404)
 
-    await collection.delete_one({"_id": ObjectId(todo_id)})
-    return {"ok": True}
+    result = await collection.delete_one({"_id": ObjectId(todo_id)})
+
+    if result.deleted_count == 0:
+        raise HTTPException(status_code=404)
+
+    return None
