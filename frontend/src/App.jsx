@@ -1,7 +1,7 @@
 import { useState, useEffect } from "react"
 import axios from "axios"
 
-const API_URL = "https://todo-fullstack-fastapi-mongo.onrender.com"
+const API_URL = "https://todo-fullstack-fastapi-mongo.onrender.com/api/todos";
 
 function App() {
   const [todos, setTodos] = useState([])
