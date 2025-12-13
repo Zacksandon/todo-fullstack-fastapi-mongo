@@ -4,7 +4,7 @@ from motor.motor_asyncio import AsyncIOMotorClient
 import os
 
 app = FastAPI(
-    title="Todo List Fullstack - MongoDB Atlas",
+    title="Todo List Fullstack",
     redirect_slashes=False
 )
 
@@ -16,9 +16,7 @@ app.add_middleware(
     allow_headers=["*"],
 )
 
-MONGO_URI = os.getenv("MONGO_URI")
-
-client = AsyncIOMotorClient(MONGO_URI)
+client = AsyncIOMotorClient(os.getenv("MONGO_URI"))
 db = client.todoapp
 collection = db.todos
 
@@ -27,5 +25,5 @@ app.include_router(todos.router)
 
 
 @app.get("/")
-def home():
-    return {"message": "Backend Todo List funcionando con MongoDB Atlas"}
+def root():
+    return {"status": "ok"}
