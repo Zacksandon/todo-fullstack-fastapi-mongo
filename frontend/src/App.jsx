@@ -60,9 +60,8 @@ function App() {
   // 🔹 CAMBIAR ESTADO
   const toggleStatus = async (todo) => {
     try {
-      await axios.put(`${API_URL}/api/todos/${todo._id}`, {
-        status:
-          todo.status === "pendiente" ? "completada" : "pendiente",
+      await axios.put(`${API_URL}/api/todos/${todo.id}`, {
+        status: todo.status === "pendiente" ? "completada" : "pendiente",
       });
       fetchTodos();
     } catch {
@@ -72,7 +71,7 @@ function App() {
 
   // 🔹 INICIAR EDICIÓN
   const startEdit = (todo) => {
-    setEditingId(todo._id);
+    setEditingId(todo.id);
     setEditTitle(todo.title);
     setEditDescription(todo.description || "");
   };
@@ -116,10 +115,7 @@ function App() {
         </h1>
 
         {/* FORMULARIO */}
-        <form
-          onSubmit={addTodo}
-          className="bg-white p-6 rounded shadow mb-6"
-        >
+        <form onSubmit={addTodo} className="bg-white p-6 rounded shadow mb-6">
           <input
             type="text"
             placeholder="Título *"
@@ -148,13 +144,10 @@ function App() {
         {/* LOADING */}
         {loading && <p className="text-center">Cargando...</p>}
 
-        {/* LISTA */}
+        {/* LISTA DE TAREAS */}
         {todos.map((todo) => (
-          <div
-            key={todo._id}
-            className="bg-white p-4 rounded shadow mb-3"
-          >
-            {editingId === todo._id ? (
+          <div key={todo.id} className="bg-white p-4 rounded shadow mb-3">
+            {editingId === todo.id ? (
               <>
                 <input
                   value={editTitle}
@@ -163,9 +156,7 @@ function App() {
                 />
                 <textarea
                   value={editDescription}
-                  onChange={(e) =>
-                    setEditDescription(e.target.value)
-                  }
+                  onChange={(e) => setEditDescription(e.target.value)}
                   className="w-full p-2 border mb-2"
                 />
                 <button
@@ -192,11 +183,8 @@ function App() {
                 >
                   {todo.title}
                 </h3>
-
                 {todo.description && (
-                  <p className="text-gray-600">
-                    {todo.description}
-                  </p>
+                  <p className="text-gray-600">{todo.description}</p>
                 )}
 
                 <div className="mt-3 flex justify-between">
@@ -204,9 +192,7 @@ function App() {
                     onClick={() => toggleStatus(todo)}
                     className="text-blue-600"
                   >
-                    {todo.status === "pendiente"
-                      ? "Completar"
-                      : "Reabrir"}
+                    {todo.status === "pendiente" ? "Completar" : "Reabrir"}
                   </button>
 
                   <div>
@@ -217,7 +203,7 @@ function App() {
                       Editar
                     </button>
                     <button
-                      onClick={() => deleteTodo(todo._id)}
+                      onClick={() => deleteTodo(todo.id)}
                       className="text-red-600"
                     >
                       Eliminar
@@ -234,3 +220,4 @@ function App() {
 }
 
 export default App;
+
