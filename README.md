@@ -6,13 +6,13 @@ Este proyecto es una aplicación **FullStack completa** diseñada para gestionar
 
 # ✨ Características principales
 
-✔ CRUD completo (Crear, Leer, Actualizar, Eliminar)  
-✔ Backend con **FastAPI + MongoDB Atlas**  
-✔ Frontend con **React + Vite**  
-✔ Estilos modernos  
-✔ Axios para peticiones  
-✔ Código modular  
-✔ Despliegue real (Render + Vercel)
+✔ CRUD completo (Crear, Leer, Actualizar, Eliminar)
+✔ Backend con **FastAPI + MongoDB Atlas**
+✔ Frontend con **React + Vite**
+✔ Estilos modernos
+✔ Axios para peticiones
+✔ Código modular
+✔ Despliegue real (Railway + Vercel)
 
 ---
 
@@ -22,10 +22,13 @@ Este proyecto es una aplicación **FullStack completa** diseñada para gestionar
 todo-fullstack-fastapi-mongo/
 │
 ├── backend/
-│   ├── app.py
-│   ├── database.py
-│   ├── models.py
-│   ├── routes.py
+│   ├── app/
+│   │   ├── main.py
+│   │   ├── database.py
+│   │   ├── models/
+│   │   │   └── todo.py
+│   │   └── routers/
+│   │       └── todos.py
 │   ├── requirements.txt
 │
 ├── frontend/
@@ -48,25 +51,29 @@ todo-fullstack-fastapi-mongo/
 # 🚀 Tecnologías empleadas
 
 ### 🔹 Backend
-- FastAPI  
-- Uvicorn  
-- Motor (MongoDB async)  
-- Pydantic  
+
+* FastAPI
+* Uvicorn
+* Motor (MongoDB async)
+* Pydantic
 
 ### 🔹 Base de datos
-- MongoDB Atlas  
-- Colección: `todos`
+
+* MongoDB Atlas
+* Colección: `todos`
 
 ### 🔹 Frontend
-- React  
-- Vite  
-- Axios  
-- Hooks  
-- CSS / Tailwind opcional
+
+* React
+* Vite
+* Axios
+* Hooks
+* CSS / Tailwind opcional
 
 ### 🔹 Despliegue
-- Render (Backend)  
-- Vercel (Frontend)  
+
+* Railway (Backend)
+* Vercel (Frontend)
 
 ---
 
@@ -75,48 +82,59 @@ todo-fullstack-fastapi-mongo/
 ## 🖥️ Backend – FastAPI
 
 ### 1️⃣ Entrar al backend
+
 ```sh
 cd backend
 ```
 
 ### 2️⃣ Crear entorno virtual
+
 ```sh
 python -m venv venv
 ```
 
 ### 3️⃣ Activarlo
+
 Windows:
+
 ```sh
-venv\Scriptsctivate
+venv\Scripts\activate
 ```
 
 Linux/Mac:
+
 ```sh
 source venv/bin/activate
 ```
 
 ### 4️⃣ Instalar dependencias
+
 ```sh
 pip install -r requirements.txt
 ```
 
 ### 5️⃣ Crear archivo `.env`
+
 ```
 MONGO_URL=mongodb+srv://<usuario>:<pass>@cluster.mongodb.net/
 ```
 
 ### 6️⃣ Ejecutar el servidor
+
 ```sh
-uvicorn app:app --reload --port 3000
+uvicorn app.main:app --host 0.0.0.0 --port 3000 --reload
 ```
 
 ### 7️⃣ Documentación automática
+
 Swagger:
+
 ```
 http://localhost:3000/docs
 ```
 
 ReDoc:
+
 ```
 http://localhost:3000/redoc
 ```
@@ -126,47 +144,57 @@ http://localhost:3000/redoc
 # 📚 Documentación de la API
 
 ## 🟩 GET /
+
 Verifica el estado del servidor.
 
 **Respuesta:**
+
 ```json
-{ "message": "Backend Todo List funcionando con MongoDB Atlas" }
+{ "message": "API Todo funcionando correctamente" }
 ```
 
 ---
 
-## 🟩 GET /todos
+## 🟩 GET /api/todos/
+
 Obtiene todas las tareas.
 
 ---
 
-## 🟨 POST /todos
+## 🟨 POST /api/todos/
+
 Crea una nueva tarea.
 
 **Body:**
+
 ```json
 {
   "title": "Estudiar",
-  "completed": false
+  "description": "",
+  "status": "pendiente"
 }
 ```
 
 ---
 
-## 🟦 PUT /todos/{id}
+## 🟦 PUT /api/todos/{id}
+
 Actualiza una tarea.
 
 **Body:**
+
 ```json
 {
   "title": "Tarea actualizada",
-  "completed": true
+  "description": "",
+  "status": "completada"
 }
 ```
 
 ---
 
-## 🟥 DELETE /todos/{id}
+## 🟥 DELETE /api/todos/{id}
+
 Elimina una tarea.
 
 ---
@@ -174,26 +202,31 @@ Elimina una tarea.
 # 🌐 Frontend – React + Vite
 
 ## 1️⃣ Entrar al frontend
+
 ```sh
 cd frontend
 ```
 
 ## 2️⃣ Instalar dependencias
+
 ```sh
 npm install
 ```
 
 ## 3️⃣ Crear archivo `.env`
+
 ```
-VITE_API_URL=http://localhost:3000
+VITE_API_URL=https://todo-fullstack-fastapi-mongo-production.up.railway.app
 ```
 
 ## 4️⃣ Ejecutar la app
+
 ```sh
 npm run dev
 ```
 
 App:
+
 ```
 http://localhost:5173
 ```
@@ -203,34 +236,41 @@ http://localhost:5173
 # 🧱 Estructura del Frontend
 
 ### 📌 `TodoForm.jsx`
+
 Formulario para crear tareas.
 
 ### 📌 `TodoList.jsx`
+
 Lista todas las tareas desde la API.
 
 ### 📌 `TodoItem.jsx`
+
 Permite:
-- editar
-- eliminar
-- marcar como completada
+
+* editar
+* eliminar
+* marcar como completada
 
 ### 📌 `App.jsx`
+
 Controla el estado principal.
 
 ---
 
 # 🛰️ Despliegue
 
-## 🔵 Backend — Render
+## 🔵 Backend — Railway
 
 **Configuración:**
+
 ```
 Runtime: Python
 Build Command: pip install -r requirements.txt
-Start Command: uvicorn app:app --host 0.0.0.0 --port $PORT
+Start Command: uvicorn app.main:app --host 0.0.0.0 --port $PORT
 ```
 
 **Variables de entorno:**
+
 ```
 MONGO_URL=...
 ```
@@ -242,62 +282,63 @@ MONGO_URL=...
 **Configuración:**
 
 Root:
+
 ```
 frontend
 ```
 
 Build:
+
 ```
 npm run build
 ```
 
 Output:
+
 ```
 dist
 ```
 
 Environment:
+
 ```
-VITE_API_URL=https://<backend>.onrender.com
+VITE_API_URL=https://todo-fullstack-fastapi-mongo-production.up.railway.app
 ```
 
 ---
 
 # 🧪 Pruebas del Sistema
 
-✔ CRUD completo probado  
-✔ CORS funcionando  
-✔ Respuestas JSON  
-✔ Validación de errores  
-✔ Prueba total en online + local  
+✔ CRUD completo probado
+✔ CORS funcionando
+✔ Respuestas JSON
+✔ Validación de errores
+✔ Prueba total en online + local
 
 ---
 
 # 🔒 Seguridad aplicada
 
-- Variables ocultas con `.env`
-- MongoDB Atlas protegido
-- CORS configurado
-- Código separado por capas
+* Variables ocultas con `.env`
+* MongoDB Atlas protegido
+* CORS configurado
+* Código separado por capas
 
 ---
 
 # 📈 Mejoras futuras
 
-- Login & JWT  
-- Prioridad de tareas  
-- Filtros  
-- Dark mode  
-- Docker  
+* Login & JWT
+* Prioridad de tareas
+* Filtros
+* Dark mode
+* Docker
 
 ---
 
 # 👨‍💻 Autor
 
-**Zack Sandon** y **Nicolas Sanchez**  
-📍 Colombia  
-GitHub: https://github.com/Zacksandon  
-
----
-
+**Zack Sandon** y **Nicolas Sanchez**
+📍 Colombia
+GitHub: [https://github.com/Zacksandon](https://github.com/Zacksandon)
 
