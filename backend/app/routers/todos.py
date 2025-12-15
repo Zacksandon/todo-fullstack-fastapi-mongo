@@ -1,11 +1,13 @@
 from fastapi import APIRouter, HTTPException
-from app.database import collection
+from app.main import collection
 from app.models.todo import Todo, TodoCreate, TodoUpdate
 from datetime import datetime
 from bson import ObjectId
 
-router = APIRouter(prefix="/api/todos", tags=["todos"])
-
+router = APIRouter(
+    prefix="/api/todos",
+    tags=["Todos"]
+)
 
 @router.get("/", response_model=list[Todo])
 async def get_todos():
@@ -20,7 +22,7 @@ async def get_todos():
 @router.post("/", response_model=Todo, status_code=201)
 async def create_todo(todo: TodoCreate):
     if not todo.title.strip():
-        raise HTTPException(400, "El título es obligatorio")
+        raise HTTPException(status_code=400, detail="Título obligatorio")
 
     new_todo = todo.dict()
     new_todo["created_at"] = datetime.utcnow()
@@ -35,7 +37,7 @@ async def create_todo(todo: TodoCreate):
 @router.put("/{todo_id}", response_model=Todo)
 async def update_todo(todo_id: str, todo_update: TodoUpdate):
     if not ObjectId.is_valid(todo_id):
-        raise HTTPException(404, "ID inválido")
+        raise HTTPException(status_code=404, detail="ID inválido")
 
     update_data = todo_update.dict(exclude_unset=True)
 
@@ -45,7 +47,7 @@ async def update_todo(todo_id: str, todo_update: TodoUpdate):
     )
 
     if result.matched_count == 0:
-        raise HTTPException(404, "No encontrado")
+        raise HTTPException(status_code=404, detail="No encontrado")
 
     updated = await collection.find_one({"_id": ObjectId(todo_id)})
     updated["id"] = str(updated["_id"])
@@ -56,11 +58,11 @@ async def update_todo(todo_id: str, todo_update: TodoUpdate):
 @router.delete("/{todo_id}", status_code=204)
 async def delete_todo(todo_id: str):
     if not ObjectId.is_valid(todo_id):
-        raise HTTPException(404)
+        raise HTTPException(status_code=404, detail="ID inválido")
 
     result = await collection.delete_one({"_id": ObjectId(todo_id)})
 
     if result.deleted_count == 0:
-        raise HTTPException(404)
+        raise HTTPException(status_code=404, detail="No encontrado")
 
     return None
