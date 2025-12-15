@@ -1,7 +1,7 @@
-import { useState, useEffect } from "react";
+import { useEffect, useState } from "react";
 import axios from "axios";
 
-const API_URL = "https://todo-fullstack-fastapi-mongo.onrender.com/api/todos";
+const API_URL = "https://todo-fullstack-fastapi-mongo.onrender.com";
 
 function App() {
   const [todos, setTodos] = useState([]);
@@ -13,17 +13,15 @@ function App() {
   const [editTitle, setEditTitle] = useState("");
   const [editDescription, setEditDescription] = useState("");
 
-  // =========================
-  // FETCH TODOS
-  // =========================
   const fetchTodos = async () => {
     try {
       setLoading(true);
-      const res = await axios.get(API_URL);
+      const res = await axios.get(`${API_URL}/api/todos/`);
       setTodos(res.data);
       setError("");
     } catch (err) {
-      setError("No se pudo conectar al backend");
+      console.error(err);
+      setError("No se pudo conectar con el backend");
     } finally {
       setLoading(false);
     }
@@ -33,49 +31,38 @@ function App() {
     fetchTodos();
   }, []);
 
-  // =========================
-  // CREATE TODO
-  // =========================
   const addTodo = async (e) => {
     e.preventDefault();
-
     if (!title.trim()) {
       setError("El título es obligatorio");
       return;
     }
 
     try {
-      await axios.post(API_URL, {
+      await axios.post(`${API_URL}/api/todos/`, {
         title: title.trim(),
         description: description.trim() || null,
         status: "pendiente",
       });
-
       setTitle("");
       setDescription("");
       fetchTodos();
-    } catch (err) {
+    } catch {
       setError("Error al crear la tarea");
     }
   };
 
-  // =========================
-  // TOGGLE STATUS
-  // =========================
-  const toggleComplete = async (todo) => {
+  const toggleStatus = async (todo) => {
     try {
-      await axios.put(`${API_URL}/${todo.id}`, {
+      await axios.put(`${API_URL}/api/todos/${todo.id}`, {
         status: todo.status === "pendiente" ? "completada" : "pendiente",
       });
       fetchTodos();
     } catch {
-      setError("Error al actualizar estado");
+      setError("Error al actualizar");
     }
   };
 
-  // =========================
-  // EDIT
-  // =========================
   const startEdit = (todo) => {
     setEditingId(todo.id);
     setEditTitle(todo.title);
@@ -89,173 +76,136 @@ function App() {
     }
 
     try {
-      await axios.put(`${API_URL}/${editingId}`, {
+      await axios.put(`${API_URL}/api/todos/${editingId}`, {
         title: editTitle.trim(),
         description: editDescription.trim() || null,
       });
-
       setEditingId(null);
-      setEditTitle("");
-      setEditDescription("");
       fetchTodos();
     } catch {
       setError("Error al guardar cambios");
     }
   };
 
-  const cancelEdit = () => {
-    setEditingId(null);
-    setEditTitle("");
-    setEditDescription("");
-  };
-
-  // =========================
-  // DELETE
-  // =========================
   const deleteTodo = async (id) => {
-    if (!confirm("¿Seguro que quieres eliminar esta tarea?")) return;
+    if (!confirm("¿Eliminar esta tarea?")) return;
 
     try {
-      await axios.delete(`${API_URL}/${id}`);
+      await axios.delete(`${API_URL}/api/todos/${id}`);
       fetchTodos();
     } catch {
-      setError("Error al eliminar la tarea");
+      setError("Error al eliminar");
     }
   };
 
-  // =========================
-  // UI
-  // =========================
   return (
-    <div className="min-h-screen bg-gradient-to-br from-blue-50 to-indigo-100 py-8 px-4">
-      <div className="max-w-4xl mx-auto">
-        <h1 className="text-5xl font-bold text-center text-gray-800 mb-10">
-          Todo List
+    <div className="min-h-screen bg-gray-100 p-6">
+      <div className="max-w-3xl mx-auto">
+        <h1 className="text-4xl font-bold text-center mb-6">
+          Todo List Fullstack
         </h1>
 
-        <form
-          onSubmit={addTodo}
-          className="bg-white rounded-2xl shadow-xl p-8 mb-10"
-        >
+        <form onSubmit={addTodo} className="bg-white p-6 rounded shadow mb-6">
           <input
             type="text"
             placeholder="Título *"
             value={title}
             onChange={(e) => setTitle(e.target.value)}
-            className="w-full p-4 border rounded-xl mb-4"
-            required
+            className="w-full p-2 border rounded mb-3"
           />
-
           <textarea
-            placeholder="Descripción (opcional)"
+            placeholder="Descripción"
             value={description}
             onChange={(e) => setDescription(e.target.value)}
-            className="w-full p-4 border rounded-xl mb-6"
-            rows="3"
+            className="w-full p-2 border rounded mb-3"
           />
-
-          <button className="w-full bg-blue-600 text-white font-bold py-3 rounded-xl hover:bg-blue-700">
+          <button className="w-full bg-blue-600 text-white py-2 rounded">
             Agregar tarea
           </button>
         </form>
 
         {error && (
-          <div className="bg-red-100 text-red-700 p-4 rounded-xl mb-6 text-center font-bold">
+          <div className="bg-red-100 text-red-700 p-3 mb-4 rounded text-center">
             {error}
           </div>
         )}
 
-        {loading && (
-          <p className="text-center text-gray-600 text-xl">
-            Cargando tareas...
-          </p>
-        )}
+        {loading && <p className="text-center">Cargando...</p>}
 
-        <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-3">
-          {todos.map((todo) => (
-            <div
-              key={todo.id}
-              className={`bg-white rounded-xl shadow p-6 ${
-                todo.status === "completada" ? "opacity-70" : ""
-              }`}
-            >
-              {editingId === todo.id ? (
-                <>
-                  <input
-                    value={editTitle}
-                    onChange={(e) => setEditTitle(e.target.value)}
-                    className="w-full p-2 border rounded mb-2"
-                  />
-                  <textarea
-                    value={editDescription}
-                    onChange={(e) => setEditDescription(e.target.value)}
-                    className="w-full p-2 border rounded mb-4"
-                  />
-                  <div className="flex gap-2">
-                    <button
-                      onClick={saveEdit}
-                      className="bg-green-600 text-white px-4 py-2 rounded"
-                    >
-                      Guardar
-                    </button>
-                    <button
-                      onClick={cancelEdit}
-                      className="bg-gray-500 text-white px-4 py-2 rounded"
-                    >
-                      Cancelar
-                    </button>
-                  </div>
-                </>
-              ) : (
-                <>
-                  <div className="flex justify-between items-start mb-2">
-                    <h3
-                      className={`text-xl font-bold ${
-                        todo.status === "completada"
-                          ? "line-through text-gray-500"
-                          : ""
-                      }`}
-                    >
-                      {todo.title}
-                    </h3>
+        {todos.map((todo) => (
+          <div
+            key={todo.id}
+            className="bg-white p-4 rounded shadow mb-3"
+          >
+            {editingId === todo.id ? (
+              <>
+                <input
+                  value={editTitle}
+                  onChange={(e) => setEditTitle(e.target.value)}
+                  className="w-full p-2 border mb-2"
+                />
+                <textarea
+                  value={editDescription}
+                  onChange={(e) => setEditDescription(e.target.value)}
+                  className="w-full p-2 border mb-2"
+                />
+                <button
+                  onClick={saveEdit}
+                  className="bg-green-600 text-white px-3 py-1 mr-2 rounded"
+                >
+                  Guardar
+                </button>
+                <button
+                  onClick={() => setEditingId(null)}
+                  className="bg-gray-500 text-white px-3 py-1 rounded"
+                >
+                  Cancelar
+                </button>
+              </>
+            ) : (
+              <>
+                <h3
+                  className={`text-xl font-bold ${
+                    todo.status === "completada"
+                      ? "line-through text-gray-500"
+                      : ""
+                  }`}
+                >
+                  {todo.title}
+                </h3>
+                {todo.description && (
+                  <p className="text-gray-600">{todo.description}</p>
+                )}
 
-                    <button
-                      onClick={() => toggleComplete(todo)}
-                      className="text-2xl"
-                    >
-                      {todo.status === "completada" ? "✓" : "○"}
-                    </button>
-                  </div>
+                <div className="mt-3 flex justify-between">
+                  <button
+                    onClick={() => toggleStatus(todo)}
+                    className="text-blue-600"
+                  >
+                    {todo.status === "pendiente"
+                      ? "Completar"
+                      : "Reabrir"}
+                  </button>
 
-                  {todo.description && (
-                    <p className="text-gray-600 mb-4">{todo.description}</p>
-                  )}
-
-                  <div className="flex justify-between">
+                  <div>
                     <button
                       onClick={() => startEdit(todo)}
-                      className="text-blue-600 font-bold"
+                      className="text-yellow-600 mr-3"
                     >
                       Editar
                     </button>
                     <button
                       onClick={() => deleteTodo(todo.id)}
-                      className="text-red-600 font-bold"
+                      className="text-red-600"
                     >
                       Eliminar
                     </button>
                   </div>
-                </>
-              )}
-            </div>
-          ))}
-        </div>
-
-        {todos.length === 0 && !loading && !error && (
-          <p className="text-center text-gray-500 mt-20 text-xl">
-            No hay tareas aún
-          </p>
-        )}
+                </div>
+              </>
+            )}
+          </div>
+        ))}
       </div>
     </div>
   );
