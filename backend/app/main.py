@@ -1,21 +1,33 @@
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
+
 from app.routers.todos import router as todos_router
 
-app = FastAPI()
+app = FastAPI(
+    title="Todo API",
+    version="1.0.0"
+)
 
-# CORS
+# CORS (necesario para frontend en Vercel)
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=["*"],
+    allow_origins=["*"],  # luego puedes cambiarlo
     allow_credentials=True,
     allow_methods=["*"],
     allow_headers=["*"],
 )
 
-# RUTAS
-app.include_router(todos_router)
-
+# Ruta raíz (OBLIGATORIA para Railway)
 @app.get("/")
 def root():
-    return {"message": "API Todo funcionando correctamente"}
+    return {
+        "status": "ok",
+        "message": "API Todo funcionando correctamente 🚀"
+    }
+
+# Rutas del módulo todos
+app.include_router(
+    todos_router,
+    prefix="/api",
+    tags=["Todos"]
+)
