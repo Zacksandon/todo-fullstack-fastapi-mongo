@@ -7,12 +7,22 @@ from app.models.todo import Todo, TodoCreate, TodoUpdate
 
 router = APIRouter(prefix="/api/todos", tags=["Todos"])
 
+
+def serialize_todo(doc):
+    return {
+        "id": str(doc["_id"]),
+        "title": doc["title"],
+        "description": doc.get("description"),
+        "status": doc.get("status", "pendiente"),
+        "created_at": doc["created_at"],
+    }
+
+
 @router.get("/", response_model=list[Todo])
 async def get_todos():
     todos = []
     async for doc in collection.find():
-        doc["id"] = str(doc["_id"])
-        todos.append(Todo(**doc))
+        todos.append(serialize_todo(doc))
     return todos
 
 
@@ -26,9 +36,8 @@ async def create_todo(todo: TodoCreate):
 
     result = await collection.insert_one(new_todo)
     created = await collection.find_one({"_id": result.inserted_id})
-    created["id"] = str(created["_id"])
 
-    return Todo(**created)
+    return serialize_todo(created)
 
 
 @router.put("/{todo_id}", response_model=Todo)
@@ -37,6 +46,7 @@ async def update_todo(todo_id: str, todo_update: TodoUpdate):
         raise HTTPException(status_code=400, detail="ID inválido")
 
     data = todo_update.dict(exclude_unset=True)
+
     await collection.update_one(
         {"_id": ObjectId(todo_id)},
         {"$set": data}
@@ -46,8 +56,7 @@ async def update_todo(todo_id: str, todo_update: TodoUpdate):
     if not updated:
         raise HTTPException(status_code=404, detail="Todo no encontrado")
 
-    updated["id"] = str(updated["_id"])
-    return Todo(**updated)
+    return serialize_todo(updated)
 
 
 @router.delete("/{todo_id}", status_code=204)
