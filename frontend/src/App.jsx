@@ -1,8 +1,8 @@
 import { useEffect, useState } from "react";
 import axios from "axios";
 
-const API_URL = import.meta.env.VITE_API_URL
-
+// 🔥 URL directa del backend en Railway
+const API_URL = "https://todo-fullstack-fastapi-mongo-production.up.railway.app";
 
 function App() {
   const [todos, setTodos] = useState([]);
@@ -14,6 +14,7 @@ function App() {
   const [editTitle, setEditTitle] = useState("");
   const [editDescription, setEditDescription] = useState("");
 
+  // 🔹 OBTENER TAREAS
   const fetchTodos = async () => {
     try {
       setLoading(true);
@@ -32,8 +33,10 @@ function App() {
     fetchTodos();
   }, []);
 
+  // 🔹 CREAR TAREA
   const addTodo = async (e) => {
     e.preventDefault();
+
     if (!title.trim()) {
       setError("El título es obligatorio");
       return;
@@ -45,6 +48,7 @@ function App() {
         description: description.trim() || null,
         status: "pendiente",
       });
+
       setTitle("");
       setDescription("");
       fetchTodos();
@@ -53,23 +57,27 @@ function App() {
     }
   };
 
+  // 🔹 CAMBIAR ESTADO
   const toggleStatus = async (todo) => {
     try {
-      await axios.put(`${API_URL}/api/todos/${todo.id}`, {
-        status: todo.status === "pendiente" ? "completada" : "pendiente",
+      await axios.put(`${API_URL}/api/todos/${todo._id}`, {
+        status:
+          todo.status === "pendiente" ? "completada" : "pendiente",
       });
       fetchTodos();
     } catch {
-      setError("Error al actualizar");
+      setError("Error al actualizar el estado");
     }
   };
 
+  // 🔹 INICIAR EDICIÓN
   const startEdit = (todo) => {
-    setEditingId(todo.id);
+    setEditingId(todo._id);
     setEditTitle(todo.title);
     setEditDescription(todo.description || "");
   };
 
+  // 🔹 GUARDAR EDICIÓN
   const saveEdit = async () => {
     if (!editTitle.trim()) {
       setError("El título no puede estar vacío");
@@ -88,6 +96,7 @@ function App() {
     }
   };
 
+  // 🔹 ELIMINAR TAREA
   const deleteTodo = async (id) => {
     if (!confirm("¿Eliminar esta tarea?")) return;
 
@@ -95,7 +104,7 @@ function App() {
       await axios.delete(`${API_URL}/api/todos/${id}`);
       fetchTodos();
     } catch {
-      setError("Error al eliminar");
+      setError("Error al eliminar la tarea");
     }
   };
 
@@ -106,7 +115,11 @@ function App() {
           Todo List Fullstack
         </h1>
 
-        <form onSubmit={addTodo} className="bg-white p-6 rounded shadow mb-6">
+        {/* FORMULARIO */}
+        <form
+          onSubmit={addTodo}
+          className="bg-white p-6 rounded shadow mb-6"
+        >
           <input
             type="text"
             placeholder="Título *"
@@ -125,20 +138,23 @@ function App() {
           </button>
         </form>
 
+        {/* ERROR */}
         {error && (
           <div className="bg-red-100 text-red-700 p-3 mb-4 rounded text-center">
             {error}
           </div>
         )}
 
+        {/* LOADING */}
         {loading && <p className="text-center">Cargando...</p>}
 
+        {/* LISTA */}
         {todos.map((todo) => (
           <div
-            key={todo.id}
+            key={todo._id}
             className="bg-white p-4 rounded shadow mb-3"
           >
-            {editingId === todo.id ? (
+            {editingId === todo._id ? (
               <>
                 <input
                   value={editTitle}
@@ -147,7 +163,9 @@ function App() {
                 />
                 <textarea
                   value={editDescription}
-                  onChange={(e) => setEditDescription(e.target.value)}
+                  onChange={(e) =>
+                    setEditDescription(e.target.value)
+                  }
                   className="w-full p-2 border mb-2"
                 />
                 <button
@@ -174,8 +192,11 @@ function App() {
                 >
                   {todo.title}
                 </h3>
+
                 {todo.description && (
-                  <p className="text-gray-600">{todo.description}</p>
+                  <p className="text-gray-600">
+                    {todo.description}
+                  </p>
                 )}
 
                 <div className="mt-3 flex justify-between">
@@ -196,7 +217,7 @@ function App() {
                       Editar
                     </button>
                     <button
-                      onClick={() => deleteTodo(todo.id)}
+                      onClick={() => deleteTodo(todo._id)}
                       className="text-red-600"
                     >
                       Eliminar
