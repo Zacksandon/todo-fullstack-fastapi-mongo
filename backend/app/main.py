@@ -2,8 +2,9 @@ from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 from app.routers.todos import router as todos_router
 
-app = FastAPI(title="Todo API")
+app = FastAPI()
 
+# CORS
 app.add_middleware(
     CORSMiddleware,
     allow_origins=["*"],
@@ -12,8 +13,9 @@ app.add_middleware(
     allow_headers=["*"],
 )
 
-app.include_router(todos_router, prefix="/todos", tags=["Todos"])
+# RUTAS
+app.include_router(todos_router)
 
 @app.get("/")
 def root():
-    return {"status": "ok", "message": "API Todo funcionando correctamente"}
+    return {"message": "API Todo funcionando correctamente"}
