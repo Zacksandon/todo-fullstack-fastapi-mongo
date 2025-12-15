@@ -1,7 +1,8 @@
 import { useEffect, useState } from "react";
 import axios from "axios";
 
-const API_URL = "https://todo-fullstack-fastapi-mongo.onrender.com";
+const API_URL = import.meta.env.VITE_API_URL
+
 
 function App() {
   const [todos, setTodos] = useState([]);
